@@ -52,11 +52,7 @@ def loopLiElement(driver):
                 time.sleep(2)
 
         except Exception as e:
-            print(f"[{index}] Error: in loopLiElement function {e} ")
-            # print li inner html
-            print(li.get_attribute("innerHTML"))
-            print("----------------------------------------------------")
-
+            print(f"[{index}] Error: in loopLiElement function {e}")
             continue
 
 
@@ -67,12 +63,33 @@ def startQuiz(driver):
     )
     attemptQuizButton.click()
 
-def selectRandomOption(driver):
-    question_div = driver.find_element(By.XPATH, '//*[starts-with(@id, "question-")]')
-    answer_div = question_div.find_element(By.CLASS_NAME, "answer")
-    option_divs = answer_div.find_elements(By.CSS_SELECTOR, 'div')
-    random.choice(option_divs).click()
+# def selectRandomOption(driver):
+#     question_div = driver.find_element(By.XPATH, '//*[starts-with(@id, "question-")]')
+#     answer_div = question_div.find_element(By.CLASS_NAME, "answer")
+#     option_divs = answer_div.find_elements(By.CSS_SELECTOR, 'div')
+#     random.choice(option_divs).click()
 
+
+def selectRandomOption(driver):
+    question_divs = driver.find_elements(By.XPATH, '//*[starts-with(@id, "question-")]')
+    print(f"Total Questions: {len(question_divs)}")
+
+    for i in range(len(question_divs)):
+        question_div = driver.find_elements(By.XPATH, '//*[starts-with(@id, "question-")]')[i]
+        print(f"\nProcessing Question {i + 1}")
+
+        answer_div = question_div.find_element(By.CLASS_NAME, "answer")
+        option_divs = answer_div.find_elements(By.CSS_SELECTOR, 'div.r0, div.r1')
+        random_div = random.choice(option_divs)
+
+        try:
+            # Scroll to input before clicking
+            label_div = random_div.find_element(By.CSS_SELECTOR, 'div.d-flex.w-auto')
+            driver.execute_script("arguments[0].scrollIntoView(true);", label_div)
+            driver.execute_script("arguments[0].click();", label_div)
+            print(f"✅ Selected option: {random_div.text.strip()}\n")
+        except Exception as e:
+            print(f"❌ Failed to click: {e}\n")
 
 def processAssignment(driver):
     while True:
@@ -118,14 +135,14 @@ driver.find_element(By.ID, "loginbtn").click()
 time.sleep(5)  # Wait for redirect after login
 
 # 4. Go to the assignments section
-driver.get("https://amigo.amityonline.com/course/view.php?id=4416&section=5#module-325827")
+driver.get("https://amigo.amityonline.com/course/view.php?id=2462&section=3#module-305123")
 time.sleep(5)
 
 # 5. Extract all <ul> elements with specific class
 # Find the <ul> element
 #//*[@id="coursecontentcollapse5"]/ul
 # ul_element = driver.find_element(By.XPATH, '//*[starts-with(@id, "coursecontentcollapse")]/ul')
-ul_element = driver.find_element(By.XPATH, '//*[@id="coursecontentcollapse5"]/ul')
+ul_element = driver.find_element(By.XPATH, '//*[@id="coursecontentcollapse3"]/ul')
 
 
 # Find all <li> elements inside the <ul>
