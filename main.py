@@ -9,8 +9,8 @@ import random
 USERNAME = "rahulsingh5@amityonline.com"
 PASSWORD = "AU05212000"
 
-ASSIGNEMT_URL = "https://amigo.amityonline.com/course/view.php?id=2490&section=7#module-140874"
-ul_element_tag = "coursecontentcollapse7"
+ASSIGNEMT_URL = "https://amigo.amityonline.com/course/view.php?id=2490&section=8#module-140888"
+ul_element_tag = "coursecontentcollapse8"
 
 
 def loopLiElement(driver):
