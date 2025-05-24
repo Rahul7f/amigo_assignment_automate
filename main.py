@@ -5,6 +5,13 @@ from webdriver_manager.chrome import ChromeDriverManager
 import time
 import random
 
+# Replace with your actual Amity credentials
+USERNAME = "rahulsingh5@amityonline.com"
+PASSWORD = "AU05212000"
+
+ASSIGNEMT_URL = "https://amigo.amityonline.com/course/view.php?id=2490&section=7#module-140874"
+ul_element_tag = "coursecontentcollapse7"
+
 
 def loopLiElement(driver):
     # Loop through LI elements
@@ -63,6 +70,7 @@ def startQuiz(driver):
     )
     attemptQuizButton.click()
 
+
 # def selectRandomOption(driver):
 #     question_div = driver.find_element(By.XPATH, '//*[starts-with(@id, "question-")]')
 #     answer_div = question_div.find_element(By.CLASS_NAME, "answer")
@@ -91,6 +99,7 @@ def selectRandomOption(driver):
         except Exception as e:
             print(f"❌ Failed to click: {e}\n")
 
+
 def processAssignment(driver):
     while True:
         selectRandomOption(driver)
@@ -108,16 +117,15 @@ def processAssignment(driver):
                 driver.find_element(By.XPATH, '//button[text()="Submit all and finish"]').click()
                 time.sleep(2)
                 # Click popup "Submit all and finish" button
-                popup_submit = driver.find_element(By.XPATH,
-                                                   '//*[@id="page-mod-quiz-summary"]/div[6]/div[2]/div/div/div[3]/button[2]')
-                popup_submit.click()
+
+                popup = driver.find_element(By.CSS_SELECTOR, '.modal-dialog.modal-dialog-scrollable')
+                popup_submit = popup.find_element(By.XPATH, './/button[text()="Submit all and finish"]')
+                driver.execute_script("arguments[0].click();", popup_submit)
                 time.sleep(2)
                 break
             except:
                 break
-# Replace with your actual Amity credentials
-USERNAME = "rahulsingh5@amityonline.com"
-PASSWORD = "AU05212000"
+
 
 # Start the browser
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
@@ -135,15 +143,14 @@ driver.find_element(By.ID, "loginbtn").click()
 time.sleep(5)  # Wait for redirect after login
 
 # 4. Go to the assignments section
-driver.get("https://amigo.amityonline.com/course/view.php?id=2462&section=3#module-305123")
+driver.get(ASSIGNEMT_URL)
 time.sleep(5)
 
 # 5. Extract all <ul> elements with specific class
 # Find the <ul> element
-#//*[@id="coursecontentcollapse5"]/ul
+# //*[@id="coursecontentcollapse5"]/ul
 # ul_element = driver.find_element(By.XPATH, '//*[starts-with(@id, "coursecontentcollapse")]/ul')
-ul_element = driver.find_element(By.XPATH, '//*[@id="coursecontentcollapse3"]/ul')
-
+ul_element = driver.find_element(By.XPATH, f'//*[@id="{ul_element_tag}"]/ul')
 
 # Find all <li> elements inside the <ul>
 li_elements = ul_element.find_elements(By.TAG_NAME, "li")

@@ -25,7 +25,7 @@ driver.find_element(By.ID, "loginbtn").click()
 time.sleep(5)  # Wait for redirect after login
 
 # 4. Go to the assignments section directly
-driver.get("https://amigo.amityonline.com/mod/quiz/attempt.php?attempt=56548464&cmid=142370")
+driver.get("https://amigo.amityonline.com/mod/quiz/attempt.php?attempt=57289792&cmid=143391")
 time.sleep(5)  # Wait for the page to load
 
 # 5. Scraping the quiz page directly
