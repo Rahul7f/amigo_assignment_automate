@@ -1,3 +1,5 @@
+from urllib.parse import urlparse
+
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
@@ -9,42 +11,56 @@ import random
 USERNAME = "rahulsingh5@amityonline.com"
 PASSWORD = "AU05212000"
 
-ASSIGNEMT_URL = "https://amigo.amityonline.com/course/view.php?id=2461&section=7#module-276844"
-ul_element_tag = "coursecontentcollapse7"
+ASSIGNEMT_URL = "https://amigo.amityonline.com/course/view.php?id=2461&section=6#module-145070"
+ul_element_id = "section-6"
 
 
 def loopLiElement(driver):
     # Loop through LI elements
     for index, li in enumerate(li_elements, start=1):
         try:
-            class_name = li.get_attribute("class")
-            # get spain
-            span = li.find_element(By.XPATH, './/span')
-            title_text = span.text
-            # get inner html of li
-            button = li.find_element(By.XPATH, './/button[starts-with(@id, "dropwdownbutton_")]')
-            button_text = button.text.strip()
-            if button_text.lower() == "done":
-                continue
+            # Assuming li is already defined
+            # Find the <a> tag
+            link_element = li.find_element(By.CSS_SELECTOR, 'a.aalink')
 
-            if "Module Assessment" in title_text:
+            # Get the link (href)
+            link = link_element.get_attribute('href')
+
+            # Extract link type from URL (e.g., 'page', 'quiz')
+            path_parts = urlparse(link).path.split('/')
+            link_type = path_parts[2] if len(path_parts) > 2 else 'unknown'
+
+            # Get the visible name (excluding "Page", "Quiz", etc.)
+            instancename_span = link_element.find_element(By.CLASS_NAME, 'instancename')
+            full_text = instancename_span.text.strip()
+
+            # Optional: strip trailing type from the end (e.g., "Page", "Quiz")
+            visible_text = full_text.rsplit(' ', 1)[0] if ' ' in full_text else full_text
+            print("Link:", link)
+            print("Type:", link_type)
+            print("Text:", visible_text)
+            print("---")
+
+
+
+            if "Module Assessment" in visible_text:
                 print(f"[{index}] Module Assessment → skipping")
                 return
 
-            if "modtype_page" in class_name or "modtype_quiz" in class_name:
+            if "page" in link_type or "quiz" in link_type:
                 link_element = li.find_element(By.TAG_NAME, "a")
-                href = link_element.get_attribute("href")
+                # href = link_element.get_attribute("href")
 
                 # Open link in new tab
-                driver.execute_script("window.open(arguments[0]);", href)
+                driver.execute_script("window.open(arguments[0]);", link)
                 driver.switch_to.window(driver.window_handles[1])
                 time.sleep(5)
 
-                if "modtype_page" in class_name:
+                if "page" in link_type:
                     print(f"[{index}] Visited PAGE → closing tab")
-                    driver.close()
+                    # driver.close()
 
-                elif "modtype_quiz" in class_name:
+                elif "quiz" in link_type:
                     try:
                         # 5. Click on the assignment link
                         startQuiz(driver)
@@ -150,10 +166,11 @@ time.sleep(5)
 # Find the <ul> element
 # //*[@id="coursecontentcollapse5"]/ul
 # ul_element = driver.find_element(By.XPATH, '//*[starts-with(@id, "coursecontentcollapse")]/ul')
-ul_element = driver.find_element(By.XPATH, f'//*[@id="{ul_element_tag}"]/ul')
+ul_element = driver.find_element(By.XPATH, f'//*[@id="{ul_element_id}"]/div[2]/ul')
 
 # Find all <li> elements inside the <ul>
 li_elements = ul_element.find_elements(By.TAG_NAME, "li")
+print(f"Total Links: {len(li_elements)}")
 
 # Loop through <li> elements and print their class names
 # Loop through LI elements

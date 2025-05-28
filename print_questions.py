@@ -8,7 +8,7 @@ from bs4 import BeautifulSoup
 # Replace with your actual Amity credentials
 USERNAME = "rahulsingh5@amityonline.com"
 PASSWORD = "AU05212000"
-ASSIGNMENT_URL = "https://amigo.amityonline.com/mod/quiz/attempt.php?attempt=57329023&cmid=143340"
+ASSIGNMENT_URL = "https://amigo.amityonline.com/mod/quiz/attempt.php?attempt=61637219&cmid=143344"
 
 # Start the browser
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
