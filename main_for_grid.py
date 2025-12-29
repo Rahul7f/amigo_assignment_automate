@@ -11,8 +11,8 @@ import random
 USERNAME = "rahulsingh5@amityonline.com"
 PASSWORD = "AU05212000"
 
-ASSIGNEMT_URL = "https://amigo.amityonline.com/course/view.php?id=2461&section=6#module-145070"
-ul_element_id = "section-6"
+ASSIGNEMT_URL = "https://amigo.amityonline.com/course/view.php?id=3217&section=8#module-178767"
+ul_element_id = "section-8"
 
 
 def loopLiElement(driver):
@@ -58,7 +58,7 @@ def loopLiElement(driver):
 
                 if "page" in link_type:
                     print(f"[{index}] Visited PAGE → closing tab")
-                    # driver.close()
+                    driver.close()
 
                 elif "quiz" in link_type:
                     try:

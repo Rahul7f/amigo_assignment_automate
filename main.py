@@ -9,8 +9,8 @@ import random
 USERNAME = "rahulsingh5@amityonline.com"
 PASSWORD = "AU05212000"
 
-ASSIGNEMT_URL = "https://amigo.amityonline.com/course/view.php?id=2461&section=7#module-276844"
-ul_element_tag = "coursecontentcollapse7"
+ASSIGNEMT_URL = "https://amigo.amityonline.com/course/view.php?id=3194&section=5"
+ul_element_tag = "coursecontentcollapse5"
 
 
 def loopLiElement(driver):
@@ -150,7 +150,7 @@ time.sleep(5)
 # Find the <ul> element
 # //*[@id="coursecontentcollapse5"]/ul
 # ul_element = driver.find_element(By.XPATH, '//*[starts-with(@id, "coursecontentcollapse")]/ul')
-ul_element = driver.find_element(By.XPATH, f'//*[@id="{ul_element_tag}"]/ul')
+ul_element = driver.find_element(By.XPATH, f'//*[@id="section-4"]/div[2]/ul')
 
 # Find all <li> elements inside the <ul>
 li_elements = ul_element.find_elements(By.TAG_NAME, "li")
