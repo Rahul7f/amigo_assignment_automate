@@ -1,6 +1,8 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
 import time
 from bs4 import BeautifulSoup
@@ -8,7 +10,7 @@ from bs4 import BeautifulSoup
 # Replace with your actual Amity credentials
 USERNAME = "rahulsingh5@amityonline.com"
 PASSWORD = "AU05212000"
-ASSIGNMENT_URL = "https://amigo.amityonline.com/mod/quiz/attempt.php?attempt=61637219&cmid=143344"
+ASSIGNMENT_URL = "https://amigo.amityonline.com/mod/quiz/attempt.php?attempt=105548471&cmid=201868"
 
 # Start the browser
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
@@ -21,9 +23,17 @@ time.sleep(3)
 driver.find_element(By.ID, "username").send_keys(USERNAME)
 driver.find_element(By.ID, "password").send_keys(PASSWORD)
 
-# 3. Click the login button
-driver.find_element(By.ID, "loginbtn").click()
-time.sleep(5)  # Wait for redirect after login
+# 3. Wait for the user to manually solve the Captcha and click Login
+print("\n" + "="*50)
+print("ACTION REQUIRED: Please solve the Captcha and click 'Log in' in the browser.")
+print("The script is waiting and will automatically resume once logged in...")
+print("="*50 + "\n")
+
+# Wait up to 300 seconds (5 minutes) for the URL to change from the login page
+WebDriverWait(driver, 300).until(
+    EC.url_changes("https://amigo.amityonline.com/login/index.php")
+)
+print("✅ Login successful! Resuming automation...")
 
 # 4. Go to the assignments section directly
 driver.get(ASSIGNMENT_URL)

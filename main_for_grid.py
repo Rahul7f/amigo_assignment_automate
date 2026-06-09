@@ -3,6 +3,8 @@ from urllib.parse import urlparse
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
 import time
 import random
@@ -11,8 +13,8 @@ import random
 USERNAME = "rahulsingh5@amityonline.com"
 PASSWORD = "AU05212000"
 
-ASSIGNEMT_URL = "https://amigo.amityonline.com/course/view.php?id=3217&section=8#module-178767"
-ul_element_id = "section-8"
+ASSIGNEMT_URL = "https://amigo.amityonline.com/course/view.php?id=3305&section=6"
+ul_element_id = "section-6"
 
 
 def loopLiElement(driver):
@@ -75,7 +77,8 @@ def loopLiElement(driver):
                 time.sleep(2)
 
         except Exception as e:
-            print(f"[{index}] Error: in loopLiElement function {e}")
+            # Just bypass the error quietly without printing the massive stack trace
+            print(f"[{index}] Could not find link or element, skipping...")
             continue
 
 
@@ -154,9 +157,17 @@ time.sleep(3)
 driver.find_element(By.ID, "username").send_keys(USERNAME)
 driver.find_element(By.ID, "password").send_keys(PASSWORD)
 
-# 3. Click the login button
-driver.find_element(By.ID, "loginbtn").click()
-time.sleep(5)  # Wait for redirect after login
+# 3. Wait for the user to manually solve the Captcha and click Login
+print("\n" + "="*50)
+print("ACTION REQUIRED: Please solve the Captcha and click 'Log in' in the browser.")
+print("The script is waiting and will automatically resume once logged in...")
+print("="*50 + "\n")
+
+# Wait up to 300 seconds (5 minutes) for the URL to change from the login page
+WebDriverWait(driver, 300).until(
+    EC.url_changes("https://amigo.amityonline.com/login/index.php")
+)
+print("✅ Login successful! Resuming automation...")
 
 # 4. Go to the assignments section
 driver.get(ASSIGNEMT_URL)
