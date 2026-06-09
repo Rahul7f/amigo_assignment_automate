@@ -1,21 +1,21 @@
-const questions = document.querySelectorAll('.que');
+let output = '';
 
-questions.forEach((q, index) => {
-    const questionText =
-        q.querySelector('.qtext')?.innerText.trim() ||
-        'Question text not found';
+document.querySelectorAll('.que').forEach((q, i) => {
+    const question =
+        q.querySelector('.qtext')?.innerText.trim() || '';
 
-    const options = [...q.querySelectorAll('label')].map(
-        x => x.innerText.trim()
-    );
+    output += `Question Number: Question ${i + 1}\n`;
+    output += `Question Text: ${question}\n`;
+    output += `Options:\n`;
 
-    console.log(`Question Number: Question ${index + 1}`);
-    console.log(`Question Text: ${questionText}`);
-    console.log('Options:');
+    const answerArea = q.querySelector('.answer');
 
-    options.forEach(opt => {
-        console.log(opt);
-    });
+    if (answerArea) {
+        output += answerArea.innerText.trim() + '\n';
+    }
 
-    console.log('-----------------------------------');
+    output += '\n---------------------------------\n\n';
 });
+
+copy(output);
+console.log('Copied to clipboard');
